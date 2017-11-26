@@ -49,7 +49,7 @@ module.exports.shortenUrl = (req, res) => {
           }
           // construct the short URL
           // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
-          shortUrl = 'taiv.io/' + base58.encode(doc._id);
+          shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
           utils.sendJSONresponse(res, 200, {
             'shortUrl': shortUrl
           });
