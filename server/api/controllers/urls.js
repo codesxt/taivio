@@ -21,7 +21,14 @@ module.exports.shortenUrl = (req, res) => {
     Url.findOne({
       long_url: longUrl
     }, function (err, doc){
-      if (doc){
+      if(err){
+        console.log(err);
+        utils.sendJSONresponse(res, 200, {
+          'message': "Ocurrió un error",
+          'error'  : err
+        });
+        return;
+      }else if (doc){
         // base58 encode the unique _id of that document and construct the short URL
         //shortUrl = req.headers.host + '/' + base58.encode(doc._id);
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
