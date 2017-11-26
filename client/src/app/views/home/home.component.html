@@ -1,0 +1,47 @@
+<div class="container home-container mt-5">
+  <div class="row animated fadeIn">
+    <div class="col-6 p-5">
+      <h1 class="display-4 text-right">Taiv.io <small class="text-muted">que la hacemos corta</small></h1>
+    </div>
+    <div class="col-6 p-5">
+      <p class="lead text-left mt-5">
+        Para acortar todos tus links llegó Taiv.io, un acortador de URLs pensado para ti.
+      </p>
+    </div>
+    <div class="offset-2 col-8 pb-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Ingresa tu link..." [(ngModel)]="longUrl">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit" (click)="shortenUrl()">
+            ¡Acórtalo!
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="offset-2 col-8 p-2 mb-2 bg-danger text-white" *ngIf="error">
+      Error: {{ error }}
+    </div>
+    <div class="offset-2 col-8 pb-5" *ngIf="result">
+      <div class="input-group">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label">Resultado:</label>
+        <input type="text" class="form-control text-white" placeholder="Ingresa tu link..." [(ngModel)]="result.shortUrl" disabled>
+        <span class="input-group-btn">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            ngxClipboard
+            [cbContent]="result.shortUrl"
+            (cbOnSuccess)="isCopied = true"
+            [ngClass]="{
+              'btn-success': isCopied
+            }"
+          >
+            <i class="fa fa-clipboard"></i>
+            <span *ngIf="!isCopied">¡Cópialo!</span>
+            <span *ngIf="isCopied">Copiado al portapapeles</span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
