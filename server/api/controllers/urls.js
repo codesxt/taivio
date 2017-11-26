@@ -26,7 +26,9 @@ module.exports.shortenUrl = (req, res) => {
         //shortUrl = req.headers.host + '/' + base58.encode(doc._id);
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
         // since the document exists, we return it without creating a new entry
-        res.send({'shortUrl': shortUrl});
+        utils.sendJSONresponse(res, 200, {
+          'shortUrl': shortUrl
+        });
       } else {
         // The long URL was not found in the long_url field in our urls
         // collection, so we need to create a new entry:
@@ -39,8 +41,11 @@ module.exports.shortenUrl = (req, res) => {
             console.log(err);
           }
           // construct the short URL
-          shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
-          res.send({'shortUrl': shortUrl});
+          // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
+          shortUrl = 'taiv.io/' + base58.encode(doc._id);
+          utils.sendJSONresponse(res, 200, {
+            'shortUrl': shortUrl
+          });
         });
       }
     });
