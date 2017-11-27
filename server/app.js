@@ -47,7 +47,7 @@ app.get('/:encoded_id', function(req, res){
       res.redirect(doc.long_url);
     } else {
       // nothing found, take 'em home
-      res.redirect(config.webhost);
+      res.redirect('/');
     }
   });
 });
