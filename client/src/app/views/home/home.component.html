@@ -1,14 +1,14 @@
 <div class="container home-container mt-5">
   <div class="row animated fadeIn">
-    <div class="col-6 p-5">
+    <div class="col-12 col-md-6 p-1 p-md-5">
       <h1 class="display-4 text-right">Taiv.io <small class="text-muted">que la hacemos corta</small></h1>
     </div>
-    <div class="col-6 p-5">
-      <p class="lead text-left mt-5">
-        Para acortar todos tus links llegó Taiv.io, un acortador de URLs pensado para ti.
+    <div class="col-12 col-md-6 p-2 p-md-5">
+      <p class="lead text-left mt-md-5">
+        Para acortar todos tus links llegó Taiv.io, <br/>un acortador de URLs pensado para ti.
       </p>
     </div>
-    <div class="offset-2 col-8 pb-4">
+    <div class="offset-md-2 col-md-8 pb-4">
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Ingresa tu link..." [(ngModel)]="longUrl">
         <span class="input-group-btn">
@@ -18,13 +18,13 @@
         </span>
       </div>
     </div>
-    <div class="offset-2 col-8 p-2 mb-2 bg-danger text-white" *ngIf="error">
+    <div class="offset-md-2 col-md-8 p-2 mb-2 bg-danger text-white" *ngIf="error">
       Error: {{ error }}
     </div>
-    <div class="offset-2 col-8 pb-5" *ngIf="result">
+    <div class="offset-md-2 col-md-8 pb-5" *ngIf="result">
       <div class="input-group">
-        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label">Resultado:</label>
-        <input type="text" class="form-control text-white" placeholder="Ingresa tu link..." [(ngModel)]="result.shortUrl" disabled>
+        <label for="colFormLabelSm" class="d-xs-none d-sm-col-sm-2 col-form-label col-form-label">Resultado:</label>
+        <input type="text" class="form-control text-white" placeholder="Tu link va aquí" [(ngModel)]="result.shortUrl" disabled>
         <span class="input-group-btn">
           <button
             class="btn btn-primary"
