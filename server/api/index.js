@@ -30,5 +30,6 @@ router.get('/users/:userId', auth, roleAuth(['administrator']), ctrlUsers.readUs
 router.patch('/users/:userId', auth, roleAuth(['administrator']), ctrlUsers.updateUser);
 
 router.post('/shorten', ctrlUrls.shortenUrl);
+router.get('/urls', ctrlUrls.getUrls);
 
 module.exports = router;

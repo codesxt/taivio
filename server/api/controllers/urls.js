@@ -4,6 +4,9 @@ const Url = mongoose.model('Url');
 var base58 = require('./base58.js');
 const validator = require('validator');
 
+const JsonApiQueryParserClass = require('jsonapi-query-parser');
+const JsonApiQueryParser = new JsonApiQueryParserClass();
+
 const urlValidation = {
   protocols: ['http','https','ftp'],
   require_tld: true,
@@ -63,4 +66,47 @@ module.exports.shortenUrl = (req, res) => {
   }
   // check if url already exists in database
 
+}
+
+module.exports.getUrls = (req, res) => {
+  var hostname    = req.headers.host;
+  let requestData = JsonApiQueryParser.parseRequest(req.url);
+  let pageNumber  = requestData.queryData.page.number  || 0;
+  let pageSize    = requestData.queryData.page.size    || 0;
+  let query = { };
+  Url.find(
+    query
+    ,
+    '',
+    {
+      sort:{ },
+      skip:pageNumber*pageSize,
+      limit:pageSize*1
+    },
+    function(err, urls){
+      if(err){
+        console.log(err);
+        utils.sendJSONresponse(res, 400, err);
+      }else{
+        Url.count(query, (err, count) => {
+          urls = urls.map((url) => {
+            return url.toJSON();
+          })
+          urls.forEach((url, index) => {
+            url.short_url = 'taiv.io/' + base58.encode(url._id);
+          });
+          utils.sendJSONresponse(res, 201, {
+            meta: {
+              "total-pages": count/pageSize,
+              "total-items": count
+            },
+            links: {
+              self: hostname+'/api/v1/urls'
+            },
+            data: urls
+          });
+        });
+      }
+    }
+  )
 }

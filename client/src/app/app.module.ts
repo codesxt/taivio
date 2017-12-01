@@ -68,6 +68,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ClipboardModule } from 'ngx-clipboard';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { ClipboardModule } from 'ngx-clipboard';
     CommonModule,
     HttpModule,
     FormsModule,
-    ClipboardModule
+    ClipboardModule,
+    NgbModule.forRoot()
   ],
   exports: [
     ClipboardModule

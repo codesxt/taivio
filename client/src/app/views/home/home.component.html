@@ -1,4 +1,4 @@
-<div class="container p-0 pt-5">
+<div class="container p-0 cdpt-5">
   <div class="row animated fadeIn home-container m-1 m-md-1">
     <div class="col-12 row">
       <div class="col-12 offset-md-1 col-md-5 p-2 p-md-5">
@@ -45,5 +45,28 @@
         </span>
       </div>
     </div>
+
+    <div class="offset-md-2 col-md-8 col-12">
+      <table class="table table-sm">
+        <thead class="thead-gray">
+          <th>Url Larga</th>
+          <th>Url Corta</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let url of urls">
+            <td>{{url.long_url}}</td>
+            <td>{{url.short_url}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ngb-pagination
+        [collectionSize]="total"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)"
+        aria-label="Pagination">
+      </ngb-pagination>
+    </div>
+
   </div>
 </div>
