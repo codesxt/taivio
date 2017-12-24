@@ -51,11 +51,13 @@
         <thead class="thead-gray">
           <th>Url Larga</th>
           <th>Url Corta</th>
+          <th>Clicks</th>
         </thead>
         <tbody>
           <tr *ngFor="let url of urls">
             <td>{{url.long_url}}</td>
             <td>{{url.short_url}}</td>
+            <td>{{url.clicks}}</td>
           </tr>
         </tbody>
       </table>

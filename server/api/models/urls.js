@@ -4,7 +4,8 @@ const counter = mongoose.model('Counter');
 
 var urlSchema = new mongoose.Schema({
   _id: {type: Number, index: true},
-  long_url: String
+  long_url: String,
+  clicks: {type: Number, default: 0}
 }, {
   timestamps: true
 });

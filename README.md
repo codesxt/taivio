@@ -4,5 +4,5 @@ Based on the tutorial from: https://coligo.io/create-url-shortener-with-node-exp
 
 ## Para inicializar la base de datos:
 mongo
-use taivio
-db.counters.insert({ _id: 'url_count', seq: 1 })
+>use taivio
+>db.counters.insert({ _id: 'url_count', seq: 1 })
