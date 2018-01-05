@@ -44,7 +44,6 @@ app.get('/:encoded_id', function(req, res){
   Url.findOne({_id: id}, function (err, doc){
     if (doc) {
       // found an entry in the DB, redirect the user to their destination
-      console.log("Clicks: " + doc.clicks);
       Url.update({_id:id},{$inc:{clicks:1}}, () => {});
       res.redirect(doc.long_url);
     } else {
