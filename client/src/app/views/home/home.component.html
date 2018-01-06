@@ -55,8 +55,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let url of urls">
-            <td class="col-8">{{url.long_url}}</td>
-            <td class="col-2">{{url.short_url}}</td>
+            <td class="col-8">
+              <a href="{{url.long_url}}" target="_blank">{{url.long_url}}</a>
+            </td>
+            <td class="col-2">
+              <a href="{{url.long_url}}" target="_blank">{{url.short_url}}</a>
+            </td>
             <td class="col-2">{{url.clicks}}</td>
           </tr>
         </tbody>
