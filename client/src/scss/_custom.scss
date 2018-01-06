@@ -10,3 +10,10 @@
 body{
   background-color: rgb(247, 87, 36);
 }
+
+.table.table-ellipsis tbody td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
