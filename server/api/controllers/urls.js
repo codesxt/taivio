@@ -3,6 +3,7 @@ const utils = require('./utils');
 const Url = mongoose.model('Url');
 var base58 = require('./base58.js');
 const validator = require('validator');
+const urlExists = require('url-exists');
 
 const JsonApiQueryParserClass = require('jsonapi-query-parser');
 const JsonApiQueryParser = new JsonApiQueryParserClass();
@@ -17,7 +18,6 @@ const urlValidation = {
 }
 
 module.exports.shortenUrl = (req, res) => {
-  console.log(req.body);
   var longUrl = req.body.url;
   var shortUrl = '';
   if(validator.isURL(longUrl, urlValidation)){
@@ -42,20 +42,28 @@ module.exports.shortenUrl = (req, res) => {
       } else {
         // The long URL was not found in the long_url field in our urls
         // collection, so we need to create a new entry:
-        var newUrl = Url({
-          long_url: longUrl
-        });
-        // save the new link
-        newUrl.save(function(err) {
-          if (err){
-            console.log(err);
+        urlExists('longUrl', function(err, exists) {
+          if(exists){
+            var newUrl = Url({
+              long_url: longUrl
+            });
+            // save the new link
+            newUrl.save(function(err) {
+              if (err){
+                console.log(err);
+              }
+              // construct the short URL
+              // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
+              shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
+              utils.sendJSONresponse(res, 200, {
+                'shortUrl': shortUrl
+              });
+            });
+          }else{
+            utils.sendJSONresponse(res, 400, {
+              message: 'No hemos podido verificar que la URL "'+longUrl+'" exista. Verifica que apunte a un sitio válido.'
+            })
           }
-          // construct the short URL
-          // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
-          shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
-          utils.sendJSONresponse(res, 200, {
-            'shortUrl': shortUrl
-          });
         });
       }
     });
