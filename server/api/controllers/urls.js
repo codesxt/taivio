@@ -42,8 +42,13 @@ module.exports.shortenUrl = (req, res) => {
       } else {
         // The long URL was not found in the long_url field in our urls
         // collection, so we need to create a new entry:
-        urlExists('longUrl', function(err, exists) {
-          if(exists){
+        urlExists(longUrl, function(err, exists) {
+          if(err){
+            console.log(err);
+            utils.sendJSONresponse(res, 400, {
+              message: 'No hemos podido verificar que la URL "'+longUrl+'" exista. Verifica que apunte a un sitio válido.'
+            })
+          }else if(exists){
             var newUrl = Url({
               long_url: longUrl
             });
