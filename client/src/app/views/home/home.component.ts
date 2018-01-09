@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaivioService } from '../../services/taivio.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -18,8 +19,11 @@ export class HomeComponent implements OnInit{
   page     : number = 1;
   pageSize : number = 10;
 
+  selectedUrl : string;
+
   constructor(
-    private taivioService : TaivioService
+    private taivioService : TaivioService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(){
@@ -61,4 +65,20 @@ export class HomeComponent implements OnInit{
     }
   }
 
+  open(content, url) {
+    this.selectedUrl = url;
+    const modalRef = this.modalService.open(content).result.then(
+      (result) => {
+
+      }, (reason) => {
+
+      }
+    );
+  }
+
+  download(){
+    let img = document.getElementById('qr_img').getElementsByTagName('div')[0].getElementsByTagName('img')[0];
+    let url = img.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+    window.open(url);
+  }
 }

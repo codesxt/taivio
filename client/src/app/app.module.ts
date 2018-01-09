@@ -69,6 +69,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpModule,
     FormsModule,
     ClipboardModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    NgxQRCodeModule
   ],
   exports: [
     ClipboardModule

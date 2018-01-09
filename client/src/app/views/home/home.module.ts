@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
@@ -16,7 +17,8 @@ import { TaivioService } from '../../services/taivio.service';
     CommonModule,
     FormsModule,
     ClipboardModule,
-    NgbModule
+    NgbModule,
+    NgxQRCodeModule
   ],
   declarations: [ HomeComponent ]
 })
