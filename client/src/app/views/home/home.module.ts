@@ -5,6 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { ShareModule } from '@ngx-share/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { ShareButtonsModule } from '@ngx-share/buttons';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
@@ -18,8 +21,14 @@ import { TaivioService } from '../../services/taivio.service';
     FormsModule,
     ClipboardModule,
     NgbModule,
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    ShareModule,
+    ShareButtonsModule,
+    HttpClientModule
   ],
-  declarations: [ HomeComponent ]
+  declarations: [ HomeComponent ],
+  providers :[
+    HttpClientModule
+  ]
 })
 export class HomeModule { }

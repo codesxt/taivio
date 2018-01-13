@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
@@ -70,6 +71,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { ShareModule } from '@ngx-share/core';
+import { ShareButtonsModule } from '@ngx-share/buttons';
 
 @NgModule({
   imports: [
@@ -83,7 +86,10 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     FormsModule,
     ClipboardModule,
     NgbModule.forRoot(),
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    ShareModule.forRoot(),
+    ShareButtonsModule.forRoot(),
+    HttpClientModule
   ],
   exports: [
     ClipboardModule

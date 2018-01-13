@@ -67,6 +67,9 @@
               <button class="btn btn-sm btn-outline-dark" (click)="open(modal_content, url.short_url)">
                 <i class="fa fa-qrcode"></i>
               </button>
+              <button class="btn btn-sm btn-outline-dark" (click)="openShare(modal_share, url.short_url)">
+                <i class="fa fa-share-alt"></i>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -103,6 +106,26 @@
       qrc-class = "aclass"
       qrc-errorCorrectionLevel = "L">
     </ngx-qrcode>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_share let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Compartir en redes sociales</h4>
+    <button type="button" class="close" aria-label="Cerrar" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <share-buttons
+      title="Compartiendo el enlace {{selectedUrl}}"
+      description="¡Revisa este link!"
+      [url]="'http://'+selectedUrl">
+    </share-buttons>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>

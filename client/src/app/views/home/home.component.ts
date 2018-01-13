@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaivioService } from '../../services/taivio.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ShareButtons } from '@ngx-share/core';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -23,7 +24,8 @@ export class HomeComponent implements OnInit{
 
   constructor(
     private taivioService : TaivioService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public  share: ShareButtons
   ) { }
 
   ngOnInit(){
@@ -66,6 +68,17 @@ export class HomeComponent implements OnInit{
   }
 
   open(content, url) {
+    this.selectedUrl = url;
+    const modalRef = this.modalService.open(content).result.then(
+      (result) => {
+
+      }, (reason) => {
+
+      }
+    );
+  }
+
+  openShare(content, url) {
     this.selectedUrl = url;
     const modalRef = this.modalService.open(content).result.then(
       (result) => {
