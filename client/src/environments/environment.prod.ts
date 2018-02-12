@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://taiv.io'
+  apiUrl: 'https://taiv.io'
 };
