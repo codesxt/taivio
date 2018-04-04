@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 
@@ -74,10 +75,14 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ShareModule } from '@ngx-share/core';
 import { ShareButtonsModule } from '@ngx-share/buttons';
 
+// Custom services
+import { AuthenticationService } from './services/authentication.service';
+
 @NgModule({
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
@@ -103,7 +108,8 @@ import { ShareButtonsModule } from '@ngx-share/buttons';
   providers: [{
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    }
+    },
+    AuthenticationService
   ],
   bootstrap: [ AppComponent ]
 })

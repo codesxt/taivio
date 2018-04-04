@@ -23,6 +23,23 @@ export const routes: Routes = [
       {
         path: 'home',
         loadChildren: './views/home/home.module#HomeModule'
+      },
+      {
+        path: 'auth',
+        loadChildren: './views/auth/authentication.module#AuthenticationModule'
+      }
+    ]
+  },
+  {
+    path: 'dashboard',
+    component: FullLayoutComponent,
+    data: {
+      title: 'Dashboard'
+    },
+    children: [
+      {
+        path: '',
+        loadChildren: './views/dashboard/dashboard.module#DashboardModule'
       }
     ]
   }
