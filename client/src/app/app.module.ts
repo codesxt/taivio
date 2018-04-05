@@ -74,9 +74,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ShareModule } from '@ngx-share/core';
 import { ShareButtonsModule } from '@ngx-share/buttons';
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
+// Shared Module
+import { SharedModule } from './shared/shared.module';
 
 // Custom services
 import { AuthenticationService } from './services/authentication.service';
+import { UsersService } from './services/users.service';
 
 @NgModule({
   imports: [
@@ -94,7 +99,17 @@ import { AuthenticationService } from './services/authentication.service';
     NgxQRCodeModule,
     ShareModule.forRoot(),
     ShareButtonsModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    SharedModule.forRoot(),
+    SimpleNotificationsModule.forRoot({
+      position        : ['bottom', 'right'],
+      timeOut         : 1500,
+      lastOnBottom    : true,
+      maxLength       : 0,
+      showProgressBar : true,
+      pauseOnHover    : true,
+      clickToClose    : false
+    })
   ],
   exports: [
     ClipboardModule
@@ -109,7 +124,8 @@ import { AuthenticationService } from './services/authentication.service';
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
-    AuthenticationService
+    AuthenticationService,
+    UsersService
   ],
   bootstrap: [ AppComponent ]
 })

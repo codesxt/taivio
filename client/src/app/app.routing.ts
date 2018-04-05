@@ -40,6 +40,10 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: './views/dashboard/dashboard.module#DashboardModule'
+      },
+      {
+        path: 'users',
+        loadChildren: './views/users/users.module#UsersModule'
       }
     ]
   }

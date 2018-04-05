@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 // Import navigation elements
 import { navigation } from './../../_nav';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-sidebar-nav',
@@ -10,10 +11,10 @@ import { navigation } from './../../_nav';
       <ul class="nav">
         <ng-template ngFor let-navitem [ngForOf]="navigation">
           <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
-          <ng-template [ngIf]="isTitle(navitem)">
+          <ng-template [ngIf]="isTitle(navitem)&&isAllowed(navitem)">
             <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
           </ng-template>
-          <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
+          <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)&&isAllowed(navitem)">
             <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
           </ng-template>
         </ng-template>
@@ -32,7 +33,22 @@ export class AppSidebarNavComponent {
     return item.title ? true : false
   }
 
-  constructor() { }
+  public isAllowed(item) {
+    if(item.role && this.authenticationService.isLoggedIn()){
+      if(item.role==this.authenticationService.getCurrentUser().role){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      // Item has no role restriction
+      return true;
+    }
+  }
+
+  constructor(
+    private authenticationService : AuthenticationService
+  ) { }
 }
 
 import { Router } from '@angular/router';

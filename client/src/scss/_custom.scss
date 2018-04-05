@@ -1,4 +1,8 @@
 // Here you can add other styles
+a, a:active, a:focus {
+  outline: none;
+}
+
 .home-container {
   background-color: #FFF;
 }
