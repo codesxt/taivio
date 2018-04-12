@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('./utils');
 const Url = mongoose.model('Url');
+const UrlList = mongoose.model('UrlList');
 var base58 = require('./base58.js');
 const validator = require('validator');
 const urlExists = require('url-exists');
@@ -77,8 +78,79 @@ module.exports.shortenUrl = (req, res) => {
       message: "La URL enviada no es válida. Revisa si está escrita correctamente y si no falta el protocolo (http / https)."
     })
   }
-  // check if url already exists in database
+}
 
+_urlToList = (user_id, url_id, list_id) => {
+  let query = {};
+  if(list_id == undefined){
+    query.type = 'default';
+    query.user = user_id;
+  }else{
+    query._id = list_id;
+    query.user = user_id;
+  }
+  UrlList.findOne(query, (err, list) => {
+    list.urls.addToSet(url_id);
+    list.save((err) => {
+    })
+  })
+}
+
+module.exports.shortenUrlToList = (req, res) => {
+  var longUrl = req.body.url;
+  var listId  = req.body.listId;
+  var shortUrl = '';
+  if(validator.isURL(longUrl, urlValidation)){
+    Url.findOne({
+      long_url: longUrl
+    }, function (err, doc){
+      if(err){
+        console.log(err);
+        utils.sendJSONresponse(res, 200, {
+          'message': "Ocurrió un error",
+          'error'  : err
+        });
+        return;
+      }else if (doc){
+        shortUrl = 'taiv.io/' + base58.encode(doc._id);
+        _urlToList(req.user._id, doc._id, listId);
+        utils.sendJSONresponse(res, 200, {
+          'shortUrl': shortUrl
+        });
+      } else {
+        urlExists(longUrl, function(err, exists) {
+          if(err){
+            console.log(err);
+            utils.sendJSONresponse(res, 400, {
+              message: 'No hemos podido verificar que la URL "'+longUrl+'" exista. Verifica que apunte a un sitio válido.'
+            })
+          }else if(exists){
+            var newUrl = Url({
+              long_url: longUrl
+            });
+            newUrl.save(function(err) {
+              if (err){
+                console.log(err);
+              }
+              _urlToList(req.user._id, newUrl._id, listId);
+              shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
+              utils.sendJSONresponse(res, 200, {
+                'shortUrl': shortUrl
+              });
+            });
+          }else{
+            utils.sendJSONresponse(res, 400, {
+              message: 'No hemos podido verificar que la URL "'+longUrl+'" exista. Verifica que apunte a un sitio válido.'
+            })
+          }
+        });
+      }
+    });
+  }else{
+    utils.sendJSONresponse(res, 400, {
+      message: "La URL enviada no es válida. Revisa si está escrita correctamente y si no falta el protocolo (http / https)."
+    })
+  }
 }
 
 module.exports.getUrls = (req, res) => {
@@ -122,4 +194,62 @@ module.exports.getUrls = (req, res) => {
       }
     }
   )
+}
+
+_cleanUrlList = (urlList) => {
+  urlList = urlList.toJSON();
+  urlList.urls.forEach((url, index) => {
+    url.short_url = 'taiv.io/' + base58.encode(url._id);
+  });
+  return urlList;
+}
+
+module.exports.getUrlList = (req, res) => {
+  // See answer to implement pagination: https://stackoverflow.com/questions/31792440/pagination-on-array-stored-in-a-document-field
+  if(req.params.listId){
+    UrlList.findOne({
+      _id : req.params.listId,
+      user: req.user._id,
+      type: 'custom'
+    })
+    .populate('urls')
+    .exec((err, urlList) => {
+      if(err || urlList == null){
+        utils.sendJSONresponse(res, 404, {
+          'message' : 'No se pudo encontrar la lista'
+        });
+      }else{
+        urlList = _cleanUrlList(urlList);
+        utils.sendJSONresponse(res, 200, {
+          'data' : urlList
+        });
+      }
+    })
+  }else{
+    UrlList.findOne({
+      user: req.user._id,
+      type: 'default'
+    })
+    .populate('urls')
+    .exec((err, urlList) => {
+      if(urlList == null){
+        var defaultList = new UrlList();
+        defaultList.name = 'Mis Links';
+        defaultList.type = 'default';
+        defaultList.user = req.user;
+        defaultList.save(
+          (err) => {
+            utils.sendJSONresponse(res, 200, {
+              'data' : defaultList
+            });
+          }
+        )
+      }else{
+        urlList = _cleanUrlList(urlList);
+        utils.sendJSONresponse(res, 200, {
+          'data': urlList
+        });
+      }
+    })
+  }
 }

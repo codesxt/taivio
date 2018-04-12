@@ -1,0 +1,1 @@
+scp -rp -P 22222 dist/ root@ferativ.com:~/apps/taivio/client

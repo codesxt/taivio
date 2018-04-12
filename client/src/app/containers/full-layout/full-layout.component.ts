@@ -7,13 +7,13 @@ import { NotificationsService } from 'angular2-notifications';
 })
 export class FullLayoutComponent {
   public options = {
-    position: ["top", "left"],
-    timeOut: 1500,
-    lastOnBottom: true,
-    maxLength: 0,
-    showProgressBar: true,
-    pauseOnHover: true,
-    clickToClose: false
+    position        : ['bottom', 'right'],
+    timeOut         : 1500,
+    lastOnBottom    : true,
+    maxLength       : 0,
+    showProgressBar : true,
+    pauseOnHover    : true,
+    clickToClose    : false
   };
   constructor(
     private notificationsService : NotificationsService

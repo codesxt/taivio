@@ -6,6 +6,7 @@ const moment = require('moment');
 // var nodemailer = require('nodemailer');
 const utils = require('./utils');
 const User = mongoose.model('User');
+const UrlList = mongoose.model('UrlList');
 
 module.exports.register = (req, res) => {
   if(!req.body.name || !req.body.email || !req.body.password1 || !req.body.password2) {
@@ -44,10 +45,18 @@ module.exports.register = (req, res) => {
             "message": "Ha ocurrido un error en la creación del usuario. Probablemente el correo utilizado ya existe en el sistema."
           })
         }else{
-          token = user.generateJwt();
-          utils.sendJSONresponse(res, 200, {
-            "token": token
-          });
+          var defaultList = new UrlList();
+          defaultList.name = 'Mis Links';
+          defaultList.type = 'default';
+          defaultList.user = user;
+          defaultList.save(
+            (err) => {
+              token = user.generateJwt();
+              utils.sendJSONresponse(res, 200, {
+                "token": token
+              });
+            }
+          )
         }
       });
     }

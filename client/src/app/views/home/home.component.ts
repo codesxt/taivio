@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TaivioService } from '../../services/taivio.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ShareButtons } from '@ngx-share/core';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -25,10 +26,15 @@ export class HomeComponent implements OnInit{
   constructor(
     private taivioService : TaivioService,
     private modalService: NgbModal,
-    public  share: ShareButtons
+    public  share: ShareButtons,
+    private router: Router,
+    private authenticationService: AuthenticationService
   ) { }
 
   ngOnInit(){
+    if(this.authenticationService.isLoggedIn()){
+      this.router.navigate(['/dashboard']);
+    }
     this.loadData();
   }
 

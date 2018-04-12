@@ -46,3 +46,4 @@ process.on('SIGTERM', function() {
 require('./users');
 require('./counter');
 require('./urls');
+require('./url-lists');

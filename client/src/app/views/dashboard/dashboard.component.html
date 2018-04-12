@@ -2,6 +2,119 @@
   <div class="card-body">
     <h4 class="card-title">Bienvenido a Taiv.io, {{ user.name }}</h4>
     <h6 class="card-subtitle mb-2 text-muted">Buena shoro</h6>
-    <p class="card-text">Acá pronto podrás gestionar tus links.</p>
+
+    <div class="col-md-8 pb-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Ingresa tu link..." [(ngModel)]="longUrl">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit" (click)="shortenUrl()">
+            ¡Acórtalo!
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-8 p-2 mb-2 bg-danger text-white" *ngIf="error">
+      Error: {{ error }}
+    </div>
+    <div class="col-md-8 pb-4" *ngIf="result">
+      <div class="input-group">
+        <label for="colFormLabelSm" class="d-xs-none d-sm-col-sm-2 col-form-label col-form-label mr-5">Resultado:</label>
+        <input type="text" class="form-control text-white" placeholder="Tu link va aquí" [(ngModel)]="result.shortUrl" disabled>
+        <span class="input-group-btn">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            ngxClipboard
+            [cbContent]="result.shortUrl"
+            (cbOnSuccess)="isCopied = true"
+            [ngClass]="{
+              'btn-success': isCopied
+            }"
+          >
+            <i class="fa fa-clipboard"></i>
+            <span *ngIf="!isCopied">¡Cópialo!</span>
+            <span *ngIf="isCopied">Copiado al portapapeles</span>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs" *ngIf="urlList">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">{{urlList.name}}</a>
+      </li>
+    </ul>
+    <div class="table-responsive" *ngIf="urls.length>0">
+      <table class="table table-sm">
+        <thead class="thead-gray">
+          <th>Url Larga</th>
+          <th>Url Corta</th>
+          <th>Clicks</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let url of urls">
+            <th>
+              <a href="{{url.long_url}}" target="_blank">{{url.long_url}}</a>
+            </th>
+            <td>
+              <a href="http://{{url.short_url}}" target="_blank">{{url.short_url}}</a>
+            </td>
+            <td>
+              {{url.clicks}}
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-dark" (click)="open(modal_content, url.short_url)">
+                <i class="fa fa-qrcode"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark" (click)="openShare(modal_share, url.short_url)">
+                <i class="fa fa-share-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p *ngIf="urls.length == 0" class="card-text m-3">Aún no acortas ningún link desde tu cuenta. ¡Hazla corta!</p>
   </div>
 </div>
+
+<ng-template #modal_content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Código QR de la URL</h4>
+    <button type="button" class="close" aria-label="Cerrar" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ngx-qrcode
+      id="qr_img"
+      [qrc-value]="selectedUrl"
+      qrc-class = "aclass"
+      qrc-errorCorrectionLevel = "L">
+    </ngx-qrcode>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_share let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Compartir en redes sociales</h4>
+    <button type="button" class="close" aria-label="Cerrar" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <share-buttons
+      title="Compartiendo el enlace {{selectedUrl}}"
+      description="¡Revisa este link!"
+      [url]="'http://'+selectedUrl">
+    </share-buttons>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
