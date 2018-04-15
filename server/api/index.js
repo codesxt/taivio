@@ -29,10 +29,19 @@ router.get('/users', auth, roleAuth(['administrator']), ctrlUsers.readUserList);
 router.get('/users/:userId', auth, roleAuth(['administrator']), ctrlUsers.readUser);
 router.patch('/users/:userId', auth, roleAuth(['administrator']), ctrlUsers.updateUser);
 
+// =============== Url Management ==================
 router.post('/shorten', ctrlUrls.shortenUrl);
 router.get('/urls', ctrlUrls.getUrls);
 router.get('/url-list', auth, ctrlUrls.getUrlList);
 router.get('/url-list/:listId', auth, ctrlUrls.getUrlList);
 router.post('/shorten-tolist', auth, ctrlUrls.shortenUrlToList);
+
+// ============== Admin information ================
+router.get(
+  '/stats/urlcount',
+  auth,
+  roleAuth(['administrator']),
+  ctrlUrls.getUrlNumber
+);
 
 module.exports = router;

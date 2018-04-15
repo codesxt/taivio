@@ -81,4 +81,16 @@ export class TaivioService {
       (response: Response) => response.json()
     );
   }
+
+  getUrlCount(): any{
+    let headers = new Headers({
+      'Authorization': 'Bearer ' + this.authenticationService.getToken()
+    });
+    let options = new RequestOptions({
+      headers: headers
+    });
+    return this.http.get(this.baseURL+'/api/v1/stats/urlcount', options).map(
+      (response: Response) => response.json()
+    );
+  }
 }

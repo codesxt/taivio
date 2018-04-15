@@ -46,6 +46,19 @@ export const routes: Routes = [
         loadChildren: './views/users/users.module#UsersModule'
       }
     ]
+  },
+  {
+    path: 'admin',
+    component: FullLayoutComponent,
+    data: {
+      title: 'Inicio'
+    },
+    children: [
+      {
+        path: '',
+        loadChildren: './views/admin/admin.module#AdminModule'
+      }
+    ]
   }
 ];
 

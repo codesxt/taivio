@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('./utils');
 const Url = mongoose.model('Url');
+const Counter = mongoose.model('Counter');
 const UrlList = mongoose.model('UrlList');
 var base58 = require('./base58.js');
 const validator = require('validator');
@@ -252,4 +253,21 @@ module.exports.getUrlList = (req, res) => {
       }
     })
   }
+}
+
+module.exports.getUrlNumber = (req, res) => {
+  Counter.findById('url_count')
+  .exec(
+    (err, count) => {
+      if(err){
+        utils.sendJSONresponse(res, 204, {
+          'message': 'No se pudo contar los links que hay en el sistema'
+        });
+        return;
+      }
+      utils.sendJSONresponse(res, 200, {
+        'data': (count.seq-1)
+      })
+    }
+  )
 }
