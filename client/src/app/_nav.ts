@@ -1,8 +1,8 @@
 export const navigation = [
   {
-    name: 'Dashboard',
+    name: 'Inicio',
     url: '/dashboard',
-    icon: 'icon-speedometer'
+    icon: 'icon-home'
   },
   {
     title : true,

@@ -45,10 +45,10 @@
       </li>
     </ul>
     <div class="table-responsive" *ngIf="urls.length>0">
-      <table class="table table-sm">
-        <thead class="thead-gray">
-          <th>Url Larga</th>
-          <th>Url Corta</th>
+      <table class="table table-hover table-sm">
+        <thead>
+          <th>Link Largo</th>
+          <th>Link Corto</th>
           <th>Clicks</th>
           <th></th>
         </thead>
@@ -64,12 +64,14 @@
               {{url.clicks}}
             </td>
             <td>
+              <div class="btn-group">
               <button class="btn btn-sm btn-outline-dark" (click)="open(modal_content, url.short_url)">
                 <i class="fa fa-qrcode"></i>
               </button>
               <button class="btn btn-sm btn-outline-dark" (click)="openShare(modal_share, url.short_url)">
                 <i class="fa fa-share-alt"></i>
               </button>
+              </div>
             </td>
           </tr>
         </tbody>

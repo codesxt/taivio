@@ -98,7 +98,8 @@ export class AppSidebarNavItemComponent {
     <a *ngIf="!isExternalLink(); else external"
       [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
       routerLinkActive="active"
-      [routerLink]="[link.url]">
+      [routerLink]="[link.url]"
+      (click)="closeSidebar()">
       <i *ngIf="isIcon()" class="{{ link.icon }}"></i>
       {{ link.name }}
       <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
@@ -132,6 +133,11 @@ export class AppSidebarNavLinkComponent {
   }
 
   constructor() { }
+
+  closeSidebar() {
+    const body = document.getElementsByTagName('body')[0];
+    body.classList.remove('sidebar-mobile-show');
+  }
 }
 
 @Component({

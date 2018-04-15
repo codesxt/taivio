@@ -34,7 +34,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: FullLayoutComponent,
     data: {
-      title: 'Dashboard'
+      title: 'Inicio'
     },
     children: [
       {
