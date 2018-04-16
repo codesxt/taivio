@@ -4,6 +4,7 @@ import { Routes,
 
 import { AdminComponent } from './admin.component';
 import { StatsComponent } from './stats/stats.component';
+import { UrlsComponent } from './urls/urls.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'stats',
         component: StatsComponent
+      },
+      {
+        path: 'urls',
+        component: UrlsComponent
       }
     ]
   }

@@ -9,6 +9,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AdminComponent } from './admin.component';
 import { StatsComponent } from './stats/stats.component';
+import { UrlsComponent } from './urls/urls.component';
 import { AdminRoutingModule } from './admin-routing.module';
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AdminRoutingModule } from './admin-routing.module';
   ],
   declarations: [
     AdminComponent,
-    StatsComponent
+    StatsComponent,
+    UrlsComponent
   ]
 })
 export class AdminModule { }
