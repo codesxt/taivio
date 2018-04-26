@@ -12,7 +12,7 @@ export class AuthenticationService {
   ) { }
 
   logout(){
-    localStorage.removeItem('heladas-token');
+    localStorage.removeItem('taivio-token');
   }
 
   isLoggedIn(): boolean {
@@ -52,10 +52,10 @@ export class AuthenticationService {
   }
 
   saveToken(token: string){
-    localStorage.setItem('heladas-token', token);
+    localStorage.setItem('taivio-token', token);
   }
 
   getToken() : string{
-    return localStorage.getItem('heladas-token');
+    return localStorage.getItem('taivio-token');
   }
 }

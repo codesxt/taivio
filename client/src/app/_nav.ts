@@ -16,6 +16,12 @@ export const navigation = [
     role  : 'administrator'
   },
   {
+    name  : 'URLs',
+    url   : '/admin/urls',
+    icon  : 'icon-list',
+    role  : 'administrator'
+  },
+  {
     name  : 'Usuarios',
     url   : '/dashboard/users',
     icon  : 'icon-user',
