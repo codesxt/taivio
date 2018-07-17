@@ -6,6 +6,9 @@ const UrlList = mongoose.model('UrlList');
 var base58 = require('./base58.js');
 const validator = require('validator');
 const urlExists = require('url-exists');
+const morgan = require('morgan');
+
+const webshot = require('webshot');
 
 const JsonApiQueryParserClass = require('jsonapi-query-parser');
 const JsonApiQueryParser = new JsonApiQueryParserClass();
@@ -19,13 +22,39 @@ const urlValidation = {
   allow_trailing_dot: false
 }
 
+const webshotOptions = {
+  screenSize: {
+    width: 320,
+    height: 480
+  },
+  shotSize: {
+    width: 320,
+    height: 320
+  },
+  renderDelay: 2,
+  streamType: 'png',
+  userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
+    + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+};
+
+function saveThumbnail(url){
+  webshot(url.long_url, 'thumbs/'+url._id+'.png', webshotOptions, function(err) {
+    if(err){
+      console.log(err)
+    }
+    console.log('Image captured for url ['+url.long_url+']')
+  });
+}
+
 module.exports.shortenUrl = (req, res) => {
   var longUrl = req.body.url;
   var shortUrl = '';
   if(validator.isURL(longUrl, urlValidation)){
     Url.findOne({
       long_url: longUrl
-    }, function (err, doc){
+    })
+    .lean()
+    .exec(function (err, doc){
       if(err){
         console.log(err);
         utils.sendJSONresponse(res, 200, {
@@ -38,8 +67,10 @@ module.exports.shortenUrl = (req, res) => {
         //shortUrl = req.headers.host + '/' + base58.encode(doc._id);
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
         // since the document exists, we return it without creating a new entry
+        saveThumbnail(doc);
         utils.sendJSONresponse(res, 200, {
-          'shortUrl': shortUrl
+          'shortUrl': shortUrl,
+          doc: doc
         });
       } else {
         // The long URL was not found in the long_url field in our urls
@@ -62,6 +93,7 @@ module.exports.shortenUrl = (req, res) => {
               // construct the short URL
               // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
               shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
+              saveThumbnail(doc);
               utils.sendJSONresponse(res, 200, {
                 'shortUrl': shortUrl
               });
@@ -115,6 +147,7 @@ module.exports.shortenUrlToList = (req, res) => {
       }else if (doc){
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
         _urlToList(req.user._id, doc._id, listId);
+        saveThumbnail(doc);
         utils.sendJSONresponse(res, 200, {
           'shortUrl': shortUrl
         });
@@ -135,6 +168,7 @@ module.exports.shortenUrlToList = (req, res) => {
               }
               _urlToList(req.user._id, newUrl._id, listId);
               shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
+              saveThumbnail(doc);
               utils.sendJSONresponse(res, 200, {
                 'shortUrl': shortUrl
               });

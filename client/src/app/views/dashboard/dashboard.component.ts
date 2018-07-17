@@ -4,11 +4,14 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { TaivioService } from '../../services/taivio.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   templateUrl: 'dashboard.component.html',
   providers: [ TaivioService ]
 })
 export class DashboardComponent {
+  apiUrl : string = environment.apiUrl;
   user : any = null;
 
   urlList : any = null;

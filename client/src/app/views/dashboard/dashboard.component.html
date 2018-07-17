@@ -44,6 +44,28 @@
         <a class="nav-link active" href="#">{{urlList.name}}</a>
       </li>
     </ul>
+
+    <div *ngIf="urls.length>0">
+      <div class="row">
+        <div class="col-3" *ngFor="let url of urls">
+          <div class="card">
+            <img class="card-img-top" src="{{apiUrl}}/thumbs/{{url._id}}.png" alt="Card image" onerror="this.src='assets/thumbnails/thumb.jpg';">
+            <div class="card-body">
+              <h5 class="card-title">{{url.short_url}}</h5>
+              <p class="card-text">{{url.long_url}}</p>
+              <div class="btn-group">
+              <button class="btn btn-sm btn-outline-dark" (click)="open(modal_content, url.short_url)">
+                <i class="fa fa-qrcode"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark" (click)="openShare(modal_share, url.short_url)">
+                <i class="fa fa-share-alt"></i>
+              </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="table-responsive" *ngIf="urls.length>0">
       <table class="table table-hover table-sm">
         <thead>

@@ -6,6 +6,7 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
+const morgan = require('morgan')
 
 // Get Configuration Files
 require('./api/models/db');
@@ -19,6 +20,8 @@ const app = express();
 
 // Enable CORS
 app.use(cors());
+
+app.use(morgan('combined'))
 
 // Parsers for POST data
 app.use(bodyParser.json());
@@ -52,6 +55,9 @@ app.get('/:encoded_id', function(req, res){
     }
   });
 });
+
+// Thumbnails
+app.use("/thumbs", express.static(__dirname + '/thumbs'));
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
