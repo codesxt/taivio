@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 const counter = mongoose.model('Counter');
 
 var urlSchema = new mongoose.Schema({
-  _id: {type: Number, index: true},
+  _id: {type: Number},
   long_url: String,
   clicks: {type: Number, default: 0}
 }, {

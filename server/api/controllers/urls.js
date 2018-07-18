@@ -244,63 +244,83 @@ module.exports.getUrlList = (req, res) => {
   let requestData = JsonApiQueryParser.parseRequest(req.url);
   let pageNumber  = requestData.queryData.page.number  || 0;
   let pageSize    = requestData.queryData.page.size    || 0;
+  let query = {};
   // See answer to implement pagination: https://stackoverflow.com/questions/31792440/pagination-on-array-stored-in-a-document-field
   let startIndex = pageNumber*pageSize;
   let endIndex   = (pageNumber*pageSize)+(+pageSize);
   if(req.params.listId){
-    UrlList.findOne({
+    query = {
       _id : req.params.listId,
       user: req.user._id,
       type: 'custom'
-    }, {
-      urls: {
-        $slice: [startIndex, endIndex]
-      }
-    })
-    .populate('urls')
-    .exec((err, urlList) => {
-      if(err || urlList == null){
-        utils.sendJSONresponse(res, 404, {
-          'message' : 'No se pudo encontrar la lista'
-        });
-      }else{
-        urlList = _cleanUrlList(urlList);
-        utils.sendJSONresponse(res, 200, {
-          'data' : urlList
-        });
-      }
-    })
+    }
   }else{
-    UrlList.findOne({
+    query = {
       user: req.user._id,
       type: 'default'
-    }, {
-      urls: {
-        $slice: [startIndex, endIndex]
-      }
-    })
-    .populate('urls')
-    .exec((err, urlList) => {
-      if(urlList == null){
-        var defaultList = new UrlList();
-        defaultList.name = 'Mis Links';
-        defaultList.type = 'default';
-        defaultList.user = req.user;
-        defaultList.save(
-          (err) => {
-            utils.sendJSONresponse(res, 200, {
-              'data' : defaultList
-            });
+    }
+  }
+  UrlList.findOne(query, {
+    urls: {
+      $slice: [startIndex, endIndex]
+    }
+  })
+  .populate('urls')
+  .exec((err, urlList) => {
+    if(err || (urlList == null && req.params.listId)){
+      utils.sendJSONresponse(res, 404, {
+        'message' : 'No se pudo encontrar la lista'
+      });
+    }else if(urlList == null){
+      var defaultList = new UrlList();
+      defaultList.name = 'Mis Links';
+      defaultList.type = 'default';
+      defaultList.user = req.user;
+      defaultList.save(
+        (err) => {
+          utils.sendJSONresponse(res, 200, {
+            meta: {
+              "total-pages": 1,
+              "total-items": 1
+            },
+            links: {
+              self: hostname+'/api/v1/users'
+            },
+            'data' : defaultList
+          });
+        }
+      )
+    }else{
+      query.user = new mongoose.Types.ObjectId(query.user);
+      UrlList.aggregate([
+        {
+          $match: query
+        },
+        {
+          $project: {
+            count: {
+              $size: "$urls"
+            }
           }
-        )
-      }else{
+        }
+      ])
+      .exec((err, result) => {
+        console.log(err, result);
+
         urlList = _cleanUrlList(urlList);
         utils.sendJSONresponse(res, 200, {
-          'data': urlList
+          'data' : urlList,
+          meta: {
+            "total-pages": result[0].count / pageSize,
+            "total-items": result[0].count
+          },
+          links: {
+            self: hostname+'/api/v1/users'
+          }
         });
-      }
-    })
-  }
+      })
+    }
+  })
 }
 
 module.exports.getUrlNumber = (req, res) => {
