@@ -31,18 +31,18 @@ const webshotOptions = {
     width: 320,
     height: 320
   },
-  renderDelay: 2,
+  renderDelay: 1000,
   streamType: 'png',
   userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
     + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
 };
 
-function saveThumbnail(url){
-  webshot(url.long_url, 'thumbs/'+url._id+'.png', webshotOptions, function(err) {
+function saveThumbnail(long_url, id){
+  webshot(long_url, 'thumbs/'+id+'.png', webshotOptions, function(err) {
     if(err){
       console.log(err)
     }
-    console.log('Image captured for url ['+url.long_url+']')
+    console.log('Image captured for url ['+long_url+']')
   });
 }
 
@@ -67,7 +67,7 @@ module.exports.shortenUrl = (req, res) => {
         //shortUrl = req.headers.host + '/' + base58.encode(doc._id);
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
         // since the document exists, we return it without creating a new entry
-        saveThumbnail(doc);
+        saveThumbnail(longUrl, doc._id);
         utils.sendJSONresponse(res, 200, {
           'shortUrl': shortUrl,
           doc: doc
@@ -93,7 +93,7 @@ module.exports.shortenUrl = (req, res) => {
               // construct the short URL
               // shortUrl = req.headers.host + '/' + base58.encode(newUrl._id);
               shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
-              saveThumbnail(newUrl);
+              saveThumbnail(longUrl, newUrl._id);
               utils.sendJSONresponse(res, 200, {
                 'shortUrl': shortUrl
               });
@@ -147,7 +147,7 @@ module.exports.shortenUrlToList = (req, res) => {
       }else if (doc){
         shortUrl = 'taiv.io/' + base58.encode(doc._id);
         _urlToList(req.user._id, doc._id, listId);
-        saveThumbnail(doc);
+        saveThumbnail(longUrl, doc._id);
         utils.sendJSONresponse(res, 200, {
           'shortUrl': shortUrl
         });
@@ -168,7 +168,7 @@ module.exports.shortenUrlToList = (req, res) => {
               }
               _urlToList(req.user._id, newUrl._id, listId);
               shortUrl = 'taiv.io/' + base58.encode(newUrl._id);
-              saveThumbnail(doc);
+              saveThumbnail(longUrl, newUrl._id);
               utils.sendJSONresponse(res, 200, {
                 'shortUrl': shortUrl
               });
@@ -240,12 +240,22 @@ _cleanUrlList = (urlList) => {
 }
 
 module.exports.getUrlList = (req, res) => {
+  var hostname    = req.headers.host;
+  let requestData = JsonApiQueryParser.parseRequest(req.url);
+  let pageNumber  = requestData.queryData.page.number  || 0;
+  let pageSize    = requestData.queryData.page.size    || 0;
   // See answer to implement pagination: https://stackoverflow.com/questions/31792440/pagination-on-array-stored-in-a-document-field
+  let startIndex = pageNumber*pageSize;
+  let endIndex   = (pageNumber*pageSize)+(+pageSize);
   if(req.params.listId){
     UrlList.findOne({
       _id : req.params.listId,
       user: req.user._id,
       type: 'custom'
+    }, {
+      urls: {
+        $slice: [startIndex, endIndex]
+      }
     })
     .populate('urls')
     .exec((err, urlList) => {
@@ -264,6 +274,10 @@ module.exports.getUrlList = (req, res) => {
     UrlList.findOne({
       user: req.user._id,
       type: 'default'
+    }, {
+      urls: {
+        $slice: [startIndex, endIndex]
+      }
     })
     .populate('urls')
     .exec((err, urlList) => {

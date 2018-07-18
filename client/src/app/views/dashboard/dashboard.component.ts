@@ -46,7 +46,11 @@ export class DashboardComponent {
       .subscribe(
         data => {
           this.result = data;
+          // Load Links after a couple of seconds to allow thumbnail generation
           this.loadData();
+          setTimeout(() => {
+            this.loadData();
+          }, 2000);
         },
         error => {
           this.error = error.json().message;
