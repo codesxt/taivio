@@ -36,6 +36,13 @@ router.get('/url-list', auth, ctrlUrls.getUrlList);
 router.get('/url-list/:listId', auth, ctrlUrls.getUrlList);
 router.post('/shorten-tolist', auth, ctrlUrls.shortenUrlToList);
 
+router.get(
+  '/generate-thumbs',
+  auth,
+  roleAuth(['administrator']),
+  ctrlUrls.generateAllThumbnails
+)
+
 // ============== Admin information ================
 router.get(
   '/stats/urlcount',

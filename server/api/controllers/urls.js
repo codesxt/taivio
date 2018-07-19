@@ -247,7 +247,7 @@ module.exports.getUrlList = (req, res) => {
   let query = {};
   // See answer to implement pagination: https://stackoverflow.com/questions/31792440/pagination-on-array-stored-in-a-document-field
   let startIndex = pageNumber*pageSize;
-  let endIndex   = (pageNumber*pageSize)+(+pageSize);
+  let itemsLimit = +pageSize;
   if(req.params.listId){
     query = {
       _id : req.params.listId,
@@ -262,7 +262,7 @@ module.exports.getUrlList = (req, res) => {
   }
   UrlList.findOne(query, {
     urls: {
-      $slice: [startIndex, endIndex]
+      $slice: [startIndex, itemsLimit]
     }
   })
   .populate('urls')
@@ -335,6 +335,17 @@ module.exports.getUrlNumber = (req, res) => {
       }
       utils.sendJSONresponse(res, 200, {
         'data': (count.seq-1)
+      })
+    }
+  )
+}
+
+module.exports.generateAllThumbnails = (req, res) => {
+  Url.find()
+  .exec(
+    (err, urls) => {
+      urls.forEach(item => {
+        saveThumbnail(item.long_url, item._id);
       })
     }
   )

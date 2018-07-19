@@ -25,4 +25,16 @@ export class StatsComponent {
       }
     )
   }
+
+  generateThumbnails(){
+    this.taivioService.generateAllThumbnails()
+    .subscribe(
+      response => {
+
+      },
+      error    => {
+        
+      }
+    )
+  }
 }

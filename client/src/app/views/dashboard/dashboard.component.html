@@ -45,6 +45,7 @@
       </li>
     </ul>
 
+    <p *ngIf="urls.length == 0" class="card-text m-3">Aún no acortas ningún link desde tu cuenta. ¡Hazla corta!</p>
     <div *ngIf="urls.length>0">
       <ngb-pagination
         [collectionSize]="total"
@@ -82,6 +83,8 @@
         aria-label="Pagination">
       </ngb-pagination>
     </div>
+
+    <!--
     <div class="table-responsive" *ngIf="urls.length>0">
       <table class="table table-hover table-sm">
         <thead>
@@ -115,7 +118,7 @@
         </tbody>
       </table>
     </div>
-    <p *ngIf="urls.length == 0" class="card-text m-3">Aún no acortas ningún link desde tu cuenta. ¡Hazla corta!</p>
+    -->
   </div>
 </div>
 

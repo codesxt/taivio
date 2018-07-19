@@ -19,7 +19,7 @@ export class DashboardComponent {
 
   total    : number = 1;
   page     : number = 1;
-  pageSize : number = 10;
+  pageSize : number = 12;
 
   selectedUrl : string;
 
@@ -65,6 +65,7 @@ export class DashboardComponent {
       data => {
         this.urlList = data.data;
         this.urls = data.data.urls;
+        this.total = data.meta['total-items'];
       },
       error => {
         console.log(error.json());

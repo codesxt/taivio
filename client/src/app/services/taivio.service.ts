@@ -93,4 +93,16 @@ export class TaivioService {
       (response: Response) => response.json()
     );
   }
+
+  generateAllThumbnails(): any{
+    let headers = new Headers({
+      'Authorization': 'Bearer ' + this.authenticationService.getToken()
+    });
+    let options = new RequestOptions({
+      headers: headers
+    });
+    return this.http.get(this.baseURL+'/api/v1/generate-thumbs', options).map(
+      (response: Response) => response.json()
+    );
+  }
 }
